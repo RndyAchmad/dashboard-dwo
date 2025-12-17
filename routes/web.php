@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/profile-example', ProfileExample::class)->name('profile-example');
     Route::get('/users', Users::class)->name('users');
-    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/mondrian', Dashboard::class)->name('dashboard');
     // Route::get('/transactions', Transactions::class)->name('transactions');
 
     // Dashboard Category
