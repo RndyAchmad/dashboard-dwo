@@ -82,7 +82,7 @@
                     plugins: [
                         Chartist.plugins.tooltip({
                             transformTooltipTextFnc: function(value) {
-                                return 'Purchasing: ' + Number(value).toLocaleString();
+                                return 'Sales Ammount: ' + Number(value).toLocaleString();
                             }
                         })
                     ]

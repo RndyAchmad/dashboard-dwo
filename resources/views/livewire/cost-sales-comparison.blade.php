@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-12 mb-4">
-        <div class="card border-0 shadow" style="background-color: #fac0b9">
+        <div class="card border shadow-sm">
             <div class="card-header d-sm-flex flex-row align-items-center flex-0">
                 <div class="d-block mb-3 mb-sm-0">
                     <div class="fs-5 fw-normal mb-2">Cost vs Sales</div>
@@ -14,24 +14,19 @@
 
     <script>
         document.addEventListener('livewire:load', function() {
-            var data = @json($chartData);
+            const data = @json($chartData);
 
-            var years = data.map(item => item.year);
-            var costs = data.map(item => item.cost);
-            var sales = data.map(item => item.sales);
-            var profitMargin = data.map(item => item.profit_margin);
+            const years = data.map(i => i.year);
+            const costs = data.map(i => Number(i.cost));
+            const sales = data.map(i => Number(i.sales));
+            const margin = data.map(i => Number(i.profit_margin));
 
-            var maxValue = Math.max(...costs, ...sales);
-
-            var options = {
+            const options = {
                 chart: {
                     type: 'line',
                     height: 400,
                     stacked: false
                 },
-                stroke: {
-                    width: [0, 0, 4]
-                }, // line untuk profit margin
                 series: [{
                         name: 'Purchase Cost',
                         type: 'column',
@@ -42,46 +37,60 @@
                         name: 'Sales Revenue',
                         type: 'column',
                         data: sales,
-                        yAxisIndex: 0
+                        yAxisIndex: 1
                     },
                     {
                         name: 'Profit Margin (%)',
                         type: 'line',
-                        data: profitMargin,
+                        data: margin,
                         yAxisIndex: 1
                     }
                 ],
+                stroke: {
+                    width: [0, 0, 4]
+                },
                 xaxis: {
                     categories: years
                 },
                 yaxis: [{
                         title: {
-                            text: 'Amount ($)'
+                            text: 'Cost ($)'
                         },
-                        min: 0,
                         labels: {
-                            formatter: function(val) {
-                                return (val / 1000000).toFixed(1) + 'M';
-                            }
+                            formatter: val => val.toLocaleString()
                         }
                     },
                     {
                         opposite: true,
                         title: {
-                            text: 'Profit Margin (%)'
+                            text: 'Revenue ($) / Profit (%)'
                         },
-                        min: 0,
-                        max: 100
+                        labels: {
+                            formatter: val => val.toLocaleString()
+                        }
                     }
                 ],
                 tooltip: {
                     shared: true,
-                    intersect: false
+                    intersect: false,
+                    y: [{
+                            formatter: val => val.toLocaleString()
+                        },
+                        {
+                            formatter: val => val.toLocaleString()
+                        },
+                        {
+                            formatter: val => val.toFixed(1) + '%'
+                        }
+                    ]
                 },
                 dataLabels: {
                     enabled: true,
                     enabledOnSeries: [0, 1, 2],
-                    formatter: function(val) {
+                    formatter: function(val, {
+                        seriesIndex
+                    }) {
+                        if (seriesIndex === 2) return val.toFixed(1) + '%';
                         return val.toLocaleString(undefined, {
                             maximumFractionDigits: 0
                         });
@@ -90,11 +99,13 @@
                 title: {
                     text: 'Cost vs Sales by Year',
                     align: 'center'
+                },
+                legend: {
+                    position: 'bottom'
                 }
             };
 
-            var chart = new ApexCharts(document.querySelector("#comboChart"), options);
-            chart.render();
+            new ApexCharts(document.querySelector("#comboChart"), options).render();
         });
     </script>
 </div>

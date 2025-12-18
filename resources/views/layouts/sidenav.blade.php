@@ -91,7 +91,7 @@
             <li role="separator" class="dropdown-divider mt-3 mb-3 border-gray-700"></li>
 
             <!-- Dashboard Global -->
-            <li class="nav-item {{ Request::segment(1) == 'dashboard' ? 'active' : '' }}">
+            <li class="nav-item {{ Request::segment(1) == 'mondrian' ? 'active' : '' }}">
                 <a href="/mondrian" class="nav-link">
                     <span class="sidebar-icon">
                         <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 24 24"
